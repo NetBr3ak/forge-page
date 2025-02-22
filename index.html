@@ -1218,7 +1218,7 @@
         const heroVideo = document.getElementById('heroVideo');
         const videoSources = ['hero-video.mp4', 'analytics.mp4', 'error_handler.mp4'];
         let currentVideoIndex = 0;
-        let rotationInterval = null;
+        let rotationTimeout = null;
 
         // Preload next video for smooth transitions
         function preloadNextVideo() {
@@ -1228,6 +1228,22 @@
             link.as = 'video';
             link.href = videoSources[nextIndex];
             document.head.appendChild(link);
+        }
+
+        function scheduleNextRotation() {
+            const currentVideo = videoSources[currentVideoIndex];
+
+            if (currentVideo === 'analytics.mp4') {
+                // For analytics, wait for video to end naturally
+                // Event listener will handle rotation
+                return;
+            } else {
+                // For hero-video and error_handler, rotate after 10 seconds
+                if (rotationTimeout) clearTimeout(rotationTimeout);
+                rotationTimeout = setTimeout(() => {
+                    rotateVideo();
+                }, 10000);
+            }
         }
 
         function rotateVideo() {
@@ -1258,9 +1274,11 @@
                 heroVideo.play().then(() => {
                     heroVideo.style.opacity = '0.5';
                     preloadNextVideo();
+                    scheduleNextRotation();
                 }).catch(err => {
                     console.log('Video playback error:', err);
                     heroVideo.style.opacity = '0.5';
+                    scheduleNextRotation();
                 });
             }, 800);
         }
@@ -1269,26 +1287,18 @@
         function handleVideoEnd() {
             const currentVideo = videoSources[currentVideoIndex];
             if (currentVideo === 'analytics.mp4') {
-                // Analytics finished playing, rotate to next video
+                // Analytics finished playing, rotate to error_handler
                 setTimeout(() => {
                     rotateVideo();
                 }, 100);
             }
         }
 
-        // Rotate video every 10 seconds (except for analytics which plays to completion)
+        // Initialize video rotation system
         if (heroVideo) {
             preloadNextVideo();
             heroVideo.addEventListener('ended', handleVideoEnd);
-
-            // Check if video is looping before rotating
-            setInterval(() => {
-                const currentVideo = videoSources[currentVideoIndex];
-                // Only auto-rotate if current video is looping (not analytics)
-                if (heroVideo.loop && currentVideo !== 'analytics.mp4') {
-                    rotateVideo();
-                }
-            }, 10000);
+            scheduleNextRotation();
 
             // Optimize video quality based on connection
             if ('connection' in navigator) {
