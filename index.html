@@ -89,6 +89,112 @@
         </div>
     </section>
 
+    <!-- Contact Form Section -->
+    <section id="contact-form" class="contact-form">
+        <div class="container">
+            <h2>Podziel się swoją opinią</h2>
+            <p class="form-intro">Twoja anonimowa opinia jest dla nas ważna. Pomóż nam ulepszyć projekt!</p>
+            <form class="form-container">
+                <div class="form-group">
+                    <label>Czy pomysł projektu Ci się podoba?</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="idea_rating" value="zdecydowanie_tak" required>
+                            Zdecydowanie tak
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="idea_rating" value="tak">
+                            Tak
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="idea_rating" value="neutralnie">
+                            Neutralnie
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="idea_rating" value="nie">
+                            Nie
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Jak oceniasz interfejs użytkownika?</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="ui_rating" value="bardzo_dobry" required>
+                            Bardzo dobry
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="ui_rating" value="dobry">
+                            Dobry
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="ui_rating" value="przecietny">
+                            Przeciętny
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="ui_rating" value="zly">
+                            Zły
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Jakie cechy projektu uważasz za najważniejsze?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="monitoring">
+                            Real-time monitoring
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="analityka">
+                            Zaawansowana analityka
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="bezpieczenstwo">
+                            Bezpieczeństwo
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="features" value="wydajnosc">
+                            Optymalizacja wydajności
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Co bym zmienił w projekcie?</label>
+                    <textarea id="improvements" name="improvements" placeholder="Podziel się swoimi sugestiami..." rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Czy widzisz potencjał komercyjny w tym projekcie?</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="commercial_potential" value="duzy" required>
+                            Duży potencjał
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="commercial_potential" value="sredni">
+                            Średni potencjał
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="commercial_potential" value="maly">
+                            Mały potencjał
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dodatkowe komentarze (opcjonalne)</label>
+                    <textarea id="comments" name="comments" placeholder="Cokolwiek innego, co chciałbyś nam powiedzieć..." rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Wyślij feedback</button>
+                <p class="form-note">Formularz jest całkowicie anonimowy. Nie zbieramy żadnych danych osobowych.</p>
+            </form>
+        </div>
+    </section>
+
     <!-- Team Section -->
     <section id="team" class="team">
         <div class="container">
