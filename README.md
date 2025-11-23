@@ -1,10 +1,10 @@
-# ForgeGrid - Landing Page
+# FailSafe - Landing Page
 
 Strona docelowa (landing page) dla projektu **FailSafe** - inteligentnego systemu monitorowania i zarządzania maszynami w infrastrukturze IT.
 
 ## 📋 O Projekcie
 
-ForgeGrid to zaawansowany system do real-time monitorowania stanu maszyn i systemów. Projekt pozwala na śledzenie parametrów systemowych, analizę wydajności i zarządzanie zasobami w nowoczesnej infrastrukturze IT.
+FailSafe to zaawansowany system do real-time monitorowania stanu maszyn i systemów. Projekt pozwala na śledzenie parametrów systemowych, analizę wydajności i zarządzanie zasobami w nowoczesnej infrastrukturze IT.
 
 ## 📱 Responsive
 
