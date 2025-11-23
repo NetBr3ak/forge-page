@@ -37,12 +37,12 @@
                 extend: {
                     colors: {
                         'cyber-dark': '#0a0e1a',
-                        'cyber-darker': '#000000',
-                        'cyber-green': '#00ff41',
-                        'cyber-amber': '#ff6b00',
-                        'cyber-blue': '#0affff',
-                        'cyber-purple': '#b026ff',
-                        'cyber-slate': '#1a1a1a',
+                        'cyber-darker': '#0d1117',
+                        'cyber-green': '#3fb950',
+                        'cyber-amber': '#f0883e',
+                        'cyber-blue': '#58a6ff',
+                        'cyber-purple': '#8b5cf6',
+                        'cyber-slate': '#161b22',
                     },
                     fontFamily: {
                         'mono': ['IBM Plex Mono', 'Courier New', 'monospace'],
@@ -73,12 +73,12 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: #050810;
+            background: #0d1117;
             opacity: 0;
             transition: opacity 0.3s ease-in;
             -webkit-text-size-adjust: 100%;
             text-size-adjust: 100%;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
         body.loaded {
@@ -86,23 +86,22 @@
         }
 
         .gradient-text {
-            background: linear-gradient(90deg, #00ff41 0%, #0affff 50%, #b026ff 100%);
+            background: linear-gradient(90deg, #3fb950 0%, #58a6ff 50%, #8b5cf6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: glowPulse 3s ease-in-out infinite;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         @keyframes glowPulse {
 
             0%,
             100% {
-                filter: drop-shadow(0 0 4px rgba(0, 255, 65, 0.4));
+                filter: drop-shadow(0 0 2px rgba(63, 185, 80, 0.3));
             }
 
             50% {
-                filter: drop-shadow(0 0 12px rgba(0, 255, 65, 0.6));
+                filter: drop-shadow(0 0 6px rgba(63, 185, 80, 0.5));
             }
         }
 
