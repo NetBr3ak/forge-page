@@ -70,6 +70,12 @@
         body {
             font-family: 'Inter', sans-serif;
             background: #050810;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+
+        body.loaded {
+            opacity: 1;
         }
 
         .gradient-text {
@@ -188,11 +194,13 @@
         /* Mobile optimizations */
         @media (max-width: 768px) {
             .scan-line {
-                display: none; /* Reduce mobile battery drain */
+                display: none;
+                /* Reduce mobile battery drain */
             }
-            
+
             #particles-js {
-                display: none; /* Disable particles on mobile for performance */
+                display: none;
+                /* Disable particles on mobile for performance */
             }
         }
 
@@ -524,7 +532,8 @@
                 </div>
 
                 <div class="space-y-6 order-1 lg:order-2 lg:col-span-2">
-                    <div class="inline-block px-4 py-2 bg-cyber-purple/10 border border-cyber-purple/30 rounded backdrop-blur-sm">
+                    <div
+                        class="inline-block px-4 py-2 bg-cyber-purple/10 border border-cyber-purple/30 rounded backdrop-blur-sm">
                         <span class="text-xs text-cyber-purple font-bold font-mono tracking-widest">■ REAL_IMPACT</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight">
@@ -563,8 +572,10 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-5 gap-16 items-center">
                 <div class="space-y-6 lg:col-span-2">
-                    <div class="inline-block px-4 py-2 bg-cyber-blue/10 border border-cyber-blue/30 rounded backdrop-blur-sm">
-                        <span class="text-xs text-cyber-blue font-bold font-mono tracking-widest">■ ANALYTICS_MODULE</span>
+                    <div
+                        class="inline-block px-4 py-2 bg-cyber-blue/10 border border-cyber-blue/30 rounded backdrop-blur-sm">
+                        <span class="text-xs text-cyber-blue font-bold font-mono tracking-widest">■
+                            ANALYTICS_MODULE</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight">
                         Wszystkie wskaźniki
@@ -655,8 +666,10 @@
     <section id="capabilities" class="relative py-32 bg-cyber-darker">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-block px-4 py-2 bg-cyber-amber/10 border border-cyber-amber/30 rounded backdrop-blur-sm mb-6">
-                    <span class="text-xs text-cyber-amber font-bold font-mono tracking-widest">■ CORE_CAPABILITIES</span>
+                <div
+                    class="inline-block px-4 py-2 bg-cyber-amber/10 border border-cyber-amber/30 rounded backdrop-blur-sm mb-6">
+                    <span class="text-xs text-cyber-amber font-bold font-mono tracking-widest">■
+                        CORE_CAPABILITIES</span>
                 </div>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
                     Wszystko, czego potrzebuje
@@ -782,7 +795,8 @@
     <section id="team" class="relative py-32 bg-cyber-darker">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16">
-                <div class="inline-block px-4 py-2 bg-cyber-purple/10 border border-cyber-purple/30 rounded backdrop-blur-sm mb-6">
+                <div
+                    class="inline-block px-4 py-2 bg-cyber-purple/10 border border-cyber-purple/30 rounded backdrop-blur-sm mb-6">
                     <span class="text-xs text-cyber-purple font-bold font-mono tracking-widest">■ THE_TEAM</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold mb-3 font-mono">DESIGNED_BY</h2>
@@ -939,7 +953,8 @@
     <section id="contact" class="relative py-32 bg-cyber-dark">
         <div class="max-w-3xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-12">
-                <div class="inline-block px-4 py-2 bg-cyber-green/10 border border-cyber-green/30 rounded backdrop-blur-sm mb-6">
+                <div
+                    class="inline-block px-4 py-2 bg-cyber-green/10 border border-cyber-green/30 rounded backdrop-blur-sm mb-6">
                     <span class="text-xs text-cyber-green font-bold font-mono tracking-widest">■ FEEDBACK_FORM</span>
                 </div>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
@@ -1222,6 +1237,9 @@
 
         // Observe all sections for animations
         document.addEventListener('DOMContentLoaded', () => {
+            // Show page after fonts and critical content loaded
+            document.body.classList.add('loaded');
+
             const animatedElements = document.querySelectorAll('section > div');
             animatedElements.forEach(el => {
                 el.classList.add('fade-in-up');
