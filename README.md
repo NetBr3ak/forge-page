@@ -1,76 +1,62 @@
-# ForgeGrid — Autonomous Production Intelligence
+# ForgeGrid | Autonomous Production Intelligence
 
-**Landing page** dla ForgeGrid — autonomicznego systemu monitoringu produkcji z reakcją na awarie w **3 sekundy**. Zbudowany dla producentów przekładników ELPLC, osiągający **93% redukcję strat** i **$4M ROI rocznie**.
+**Project Overview**
+Landing page for ForgeGrid, an autonomous production monitoring system capable of responding to failures in 3 seconds. Built for ELPLC transformer manufacturers, achieving 93% loss reduction and $4M annual ROI.
 
-## 🎯 Kluczowe Metryki
+## Key Metrics
 
-- **$72,000/godz**: Koszt przestoju linii produkcyjnej (ELPLC)
-- **93% redukcja strat**: Z $36k do $2.4k na incydent
-- **$33,600 oszczędności**: Na każdej awarii
-- **$4M ROI**: Przy 10 incydentach miesięcznie
-- **3 sekundy**: Reorganizacja planu przy awarii maszyny
-- **4 maszyny**: Monitoring real-time z 12 typami zadań
+*   **$72,000 per hour** Cost of production line downtime
+*   **93% loss reduction** From $36k to $2.4k per incident
+*   **$33,600 savings** Per failure event
+*   **$4M ROI** Based on 10 incidents monthly
+*   **3 seconds** To reorganize plan upon machine failure
+*   **4 machines** Monitored in real time with 12 task types
 
-## 🎨 Design System
+## Design System
 
 ### Industrial Cyber Theme
-- **Color Palette**:
-  - `#00ff9f` — cyber-green (primary)
-  - `#00d4ff` — cyber-blue (accent)
-  - `#ffb84d` — cyber-amber (warnings)
-  - `#a855f7` — cyber-purple (highlights)
-- **Typography**: JetBrains Mono (terminal) + Inter (UI)
-- **Effects**: Particles.js, scan lines, glow animations
-- **Performance**: Lazy loading, Intersection Observer, GPU acceleration
+*   **Palette** Forge Black (#050505), Forge Dark (#0A0A0A), Forge Card (#111111), Forge Border (#262626), Forge Text (#EDEDED)
+*   **Typography** IBM Plex Mono (Technical), Inter (UI)
+*   **Visuals** Grayscale video backgrounds, sharp borders, minimalist grid patterns
+*   **Performance** Lazy loading, Intersection Observer, GPU acceleration
 
-## ⚡ Tech Stack
+## Tech Stack
 
-```bash
-HTML5                    # Semantic structure
-Tailwind CSS (CDN)       # Utility-first styling
-Particles.js             # Interactive background
-JavaScript (Vanilla)     # Zero dependencies
-GitHub Actions           # CI/CD deployment
-```
+*   **HTML5** Semantic structure
+*   **Tailwind CSS** Utility first styling
+*   **JavaScript** Vanilla with zero dependencies
+*   **GitHub Actions** CI/CD deployment
 
-## 🚀 Features
+## Features
 
-- ✅ **Real-time Dashboard**: Status 4 maszyn, kolejki zadań, ETA
-- ✅ **Makespan Algorithm**: Automatyczna optymalizacja przydziału
-- ✅ **Analytics Module**: 3 wykresy interaktywne, event log, CSV export
-- ✅ **Mobile Optimized**: Responsywność + wyłączenie ciężkich efektów
-- ✅ **SEO Ready**: Open Graph, meta tags, structured data
-- ✅ **Performance**: Preload, lazy loading, 69KB HTML
+*   **Real time Dashboard** Status of 4 machines, task queues, ETA
+*   **Makespan Algorithm** Automatic allocation optimization
+*   **Analytics Module** 3 interactive charts, event log, CSV export
+*   **Mobile Optimized** Responsive design with critical CSS
+*   **SEO Ready** Open Graph, meta tags, structured data
+*   **Performance** Preload, lazy loading, optimized assets
 
-## 🔗 Links
+## Links
 
-- 🌐 **Landing Page**: [https://netbr3ak.github.io/hackathon-landing-page/](https://netbr3ak.github.io/hackathon-landing-page/)
-- 🎮 **Live Demo**: [https://netbr3ak.github.io/internal-machine-monitor/](https://netbr3ak.github.io/internal-machine-monitor/)
-- 💻 **Source Code**: [https://github.com/NetBr3ak/internal-machine-monitor](https://github.com/NetBr3ak/internal-machine-monitor)
+*   **Landing Page** [https://netbr3ak.github.io/hackathon-landing-page/](https://netbr3ak.github.io/hackathon-landing-page/)
+*   **Live Demo** [https://netbr3ak.github.io/internal-machine-monitor/](https://netbr3ak.github.io/internal-machine-monitor/)
+*   **Source Code** [https://github.com/NetBr3ak/internal-machine-monitor](https://github.com/NetBr3ak/internal-machine-monitor)
 
-## 📱 Responsive Breakpoints
+## Target Audience
 
-| Device  | Width      | Optimizations                         |
-| ------- | ---------- | ------------------------------------- |
-| Desktop | 1200px+    | Full particles.js, all animations     |
-| Tablet  | 768-1199px | Reduced particles, simplified effects |
-| Mobile  | <768px     | Particles disabled, critical CSS only |
+Industrial manufacturers characterized by:
+*   Multiple production machines (4+)
+*   Diverse task types (10+)
+*   High downtime costs ($50k+/h)
+*   Requirement for real time visibility
 
-## 🎯 Target Audience
+## Content Sections
 
-**Producenci przemysłowi** z:
-- Wieloma maszynami produkcyjnymi (4+)
-- Różnorodnymi typami zadań (10+)
-- Wysokimi kosztami przestoju ($50k+/h)
-- Potrzebą real-time visibility
-
-## 📊 Content Sections
-
-1. **Hero**: Value proposition + 4 stat cards
-2. **Platform**: Feature overview + demo video
-3. **Real Impact**: Financial metrics + case study (ELPLC)
-4. **Analytics**: Dashboard preview + 3 core features
-5. **Capabilities**: 6 feature cards z ikonami
-6. **Team**: 6 członków + LinkedIn QR codes
-7. **Contact**: Feedback form (5 pytań)
+1.  **Hero** Value proposition and 4 statistic cards
+2.  **Platform** Feature overview and demo video
+3.  **Real Impact** Financial metrics and ELPLC case study
+4.  **Analytics** Dashboard preview and 3 core features
+5.  **Capabilities** 6 feature cards with icons
+6.  **Team** 6 members with LinkedIn QR codes
+7.  **Contact** Feedback form with 5 questions
 
