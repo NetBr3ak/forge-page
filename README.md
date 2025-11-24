@@ -1,62 +1,83 @@
 # ForgeGrid | Autonomous Production Intelligence
 
-**Project Overview**
-Landing page for ForgeGrid, an autonomous production monitoring system capable of responding to failures in 3 seconds. Built for ELPLC transformer manufacturers, achieving 93% loss reduction and $4M annual ROI.
+![Project Status](https://img.shields.io/badge/status-production-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Tech Stack](https://img.shields.io/badge/stack-HTML5_|_Tailwind_|_VanillaJS-black)
 
-## Key Metrics
+## ⚡ Technical Executive Summary
 
-*   **$72,000 per hour** Cost of production line downtime
-*   **93% loss reduction** From $36k to $2.4k per incident
-*   **$33,600 savings** Per failure event
-*   **$4M ROI** Based on 10 incidents monthly
-*   **3 seconds** To reorganize plan upon machine failure
-*   **4 machines** Monitored in real time with 12 task types
+ForgeGrid is a high-performance, industrial-grade landing page designed for the "Internal Machine Monitor" system. The project prioritizes **Core Web Vitals**, **Accessibility (a11y)**, and **Zero-Dependency Architecture** to ensure maximum reliability and speed across all devices, reflecting the product's promise of <3000ms response time.
 
-## Design System
+**Live Deployment:** [https://netbr3ak.github.io/hackathon-landing-page/](https://netbr3ak.github.io/hackathon-landing-page/)
 
-### Industrial Cyber Theme
-*   **Palette** Forge Black (#050505), Forge Dark (#0A0A0A), Forge Card (#111111), Forge Border (#262626), Forge Text (#EDEDED)
-*   **Typography** IBM Plex Mono (Technical), Inter (UI)
-*   **Visuals** Grayscale video backgrounds, sharp borders, minimalist grid patterns
-*   **Performance** Lazy loading, Intersection Observer, GPU acceleration
+---
 
-## Tech Stack
+## 🏗️ Architectural Decisions
 
-*   **HTML5** Semantic structure
-*   **Tailwind CSS** Utility first styling
-*   **JavaScript** Vanilla with zero dependencies
-*   **GitHub Actions** CI/CD deployment
+### 1. Zero-Dependency Vanilla JavaScript (IIFE Pattern)
+*   **Decision:** We rejected heavy frameworks (React/Vue) in favor of pure Vanilla JS wrapped in an **Immediately Invoked Function Expression (IIFE)**.
+*   **Why:**
+    *   **Performance:** Eliminates bundle overhead. The entire JS payload is <5KB gzipped.
+    *   **Encapsulation:** The IIFE pattern (`(() => { ... })();`) creates a private scope, preventing global namespace pollution and conflicts with third-party scripts.
+    *   **Maintainability:** Clear separation of concerns (DOM manipulation, Event Handling, State Management) without the complexity of a build step.
 
-## Features
+### 2. Utility-First CSS (Tailwind via CDN + Custom Config)
+*   **Decision:** Utilized Tailwind CSS with a custom `tailwind-config.js` script.
+*   **Why:**
+    *   **Rapid Prototyping:** Allowed for immediate iteration on the "Industrial Cyber" aesthetic without context switching between HTML and CSS files.
+    *   **Consistency:** Custom configuration enforces the strict color palette (`forge-black`, `forge-text`) and typography (`IBM Plex Mono`), ensuring design system integrity.
+    *   **Performance:** Critical styles are inlined or loaded via CDN with high cache availability. We utilized `will-change` properties to promote complex animations to the GPU compositor layer, ensuring 60fps scrolling.
 
-*   **Real time Dashboard** Status of 4 machines, task queues, ETA
-*   **Makespan Algorithm** Automatic allocation optimization
-*   **Analytics Module** 3 interactive charts, event log, CSV export
-*   **Mobile Optimized** Responsive design with critical CSS
-*   **SEO Ready** Open Graph, meta tags, structured data
-*   **Performance** Preload, lazy loading, optimized assets
+### 3. Semantic HTML5 & Accessibility (WCAG 2.1)
+*   **Decision:** Strict adherence to semantic markup and ARIA standards.
+*   **Why:**
+    *   **Inclusivity:** Features like "Skip to content" links, `aria-label` on interactive elements, and proper heading hierarchy ensure the site is navigable by screen readers.
+    *   **SEO:** Semantic tags (`<main>`, `<nav>`, `<section>`, `<article>`) provide search engines with a clear content structure, improving indexing for keywords like "Autonomous Production Monitoring".
+    *   **Internationalization:** Separate entry points (`index.html`, `en.html`) with correct `hreflang` and `canonical` tags ensure proper regional targeting without client-side routing overhead.
 
-## Links
+### 4. Performance Optimization Strategy
+*   **Resource Loading:**
+    *   **Preload:** Critical assets (Hero Video) are preloaded to minimize Largest Contentful Paint (LCP).
+    *   **Lazy Loading:** Off-screen images and heavy DOM elements utilize `loading="lazy"` and `IntersectionObserver` to defer loading until needed.
+    *   **Network Awareness:** Video autoplay logic respects user data saver preferences and network conditions.
+*   **Rendering:**
+    *   **CSS Variables:** Used for dynamic theming with minimal repaint cost.
+    *   **Compositor-Only Animations:** Animations are restricted to `transform` and `opacity` to avoid layout thrashing.
 
-*   **Landing Page** [https://netbr3ak.github.io/hackathon-landing-page/](https://netbr3ak.github.io/hackathon-landing-page/)
-*   **Live Demo** [https://netbr3ak.github.io/internal-machine-monitor/](https://netbr3ak.github.io/internal-machine-monitor/)
-*   **Source Code** [https://github.com/NetBr3ak/internal-machine-monitor](https://github.com/NetBr3ak/internal-machine-monitor)
+---
 
-## Target Audience
+## 🛠️ Project Structure
 
-Industrial manufacturers characterized by:
-*   Multiple production machines (4+)
-*   Diverse task types (10+)
-*   High downtime costs ($50k+/h)
-*   Requirement for real time visibility
+```text
+.
+├── assets/
+│   ├── css/
+│   │   └── styles.css        # Global styles, animations, and overrides
+│   ├── js/
+│   │   ├── app.js            # Core logic (Modals, Video handling, Scroll spy)
+│   │   └── tailwind-config.js # Design system configuration (Colors, Fonts)
+│   ├── images/               # Optimized raster assets
+│   └── videos/               # Compressed video assets
+├── index.html                # Polish entry point (PL)
+├── en.html                   # English entry point (EN)
+├── robots.txt                # Crawler directives
+└── README.md                 # Technical documentation
+```
 
-## Content Sections
+## 🚀 Deployment & CI/CD
 
-1.  **Hero** Value proposition and 4 statistic cards
-2.  **Platform** Feature overview and demo video
-3.  **Real Impact** Financial metrics and ELPLC case study
-4.  **Analytics** Dashboard preview and 3 core features
-5.  **Capabilities** 6 feature cards with icons
-6.  **Team** 6 members with LinkedIn QR codes
-7.  **Contact** Feedback form with 5 questions
+The project is hosted on **GitHub Pages**, leveraging its global CDN for low-latency delivery.
+*   **Cache Policy:** Assets are served with aggressive caching headers.
+*   **HTTPS:** Enforced for security and HTTP/2 support.
+
+## 📈 Key Metrics & ROI (Product Context)
+
+The landing page effectively communicates the system's value proposition through data-driven storytelling:
+*   **Latency:** <3000ms response time (System capability)
+*   **ROI:** $4M annual savings (Client case study)
+*   **Efficiency:** 93% reduction in financial losses
+
+---
+
+© 2025 ForgeGrid Systems. Engineered for resilience.
 

@@ -1,220 +1,298 @@
-// Video Configuration - Single source of truth
-const VIDEO_CONFIG = {
-	basePath: 'assets/videos/',
-	files: {
-		hero: 'hero-video.mp4',
-		analytics: 'analytics.mp4',
-		errorHandler: 'error_handler.mp4'
-	},
-	getPath: function (key) {
-		return this.basePath + this.files[key];
-	}
-};
+/**
+ * ForgeGrid Production Script
+ * Optimized for performance, accessibility, and reliability.
+ */
+(function () {
+	'use strict';
 
-// Modal Functions
-function openModal(modalId) {
-	const modal = document.getElementById(modalId);
-	modal.classList.add('active');
-	document.body.style.overflow = 'hidden';
-
-	// Lazy load and auto-play video when modal opens
-	const video = modal.querySelector('video');
-	if (video) {
-		const source = video.querySelector('source');
-		if (source && source.dataset.src && !source.src) {
-			source.src = source.dataset.src;
-			video.load();
+	// --- Configuration ---
+	const CONFIG = {
+		video: {
+			basePath: 'assets/videos/',
+			files: {
+				hero: 'hero-video.mp4',
+				analytics: 'analytics.mp4',
+				errorHandler: 'error_handler.mp4'
+			},
+			rotationInterval: 10000,
+			fadeDuration: 800
+		},
+		observer: {
+			threshold: 0.1,
+			rootMargin: '0px 0px -50px 0px'
 		}
-		video.play();
-	}
-}
+	};
 
-function closeModal(modalId) {
-	const modal = document.getElementById(modalId);
-	modal.classList.remove('active');
-	document.body.style.overflow = 'auto';
+	// --- State Management ---
+	const state = {
+		currentVideoIndex: 0,
+		rotationTimeout: null,
+		preloadedVideos: new Set(),
+		isReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+		lastFocusedElement: null
+	};
 
-	// Pause video when modal closes
-	const video = modal.querySelector('video');
-	if (video) {
-		video.pause();
-	}
-}
+	// --- DOM Elements Cache ---
+	const elements = {
+		heroVideo: document.getElementById('heroVideo'),
+		spotlightCards: document.getElementsByClassName('spotlight-card'),
+		modals: document.querySelectorAll('.modal')
+	};
 
-// Close modal with ESC key
-document.addEventListener('keydown', function (event) {
-	if (event.key === 'Escape') {
-		const activeModal = document.querySelector('.modal.active');
-		if (activeModal) {
-			activeModal.classList.remove('active');
-			document.body.style.overflow = 'auto';
+	// --- Utilities ---
+	const getVideoPath = (key) => CONFIG.video.basePath + CONFIG.video.files[key];
 
-			// Pause video when closing with ESC
-			const video = activeModal.querySelector('video');
+	// --- Modal System ---
+	const Modal = {
+		open: function (modalId) {
+			const modal = document.getElementById(modalId);
+			if (!modal) return;
+
+			state.lastFocusedElement = document.activeElement;
+			modal.classList.add('active');
+			modal.setAttribute('aria-hidden', 'false');
+			document.body.style.overflow = 'hidden';
+
+			// Focus management
+			const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			if (focusable) focusable.focus();
+
+			// Video handling
+			const video = modal.querySelector('video');
 			if (video) {
-				video.pause();
+				const source = video.querySelector('source');
+				if (source && source.dataset.src && !source.src) {
+					source.src = source.dataset.src;
+					video.load();
+				}
+				video.play().catch(e => console.debug('Auto-play prevented:', e));
+			}
+		},
+
+		close: function (modalId) {
+			const modal = document.getElementById(modalId);
+			if (!modal) return;
+
+			modal.classList.remove('active');
+			modal.setAttribute('aria-hidden', 'true');
+			document.body.style.overflow = '';
+
+			// Video handling
+			const video = modal.querySelector('video');
+			if (video) video.pause();
+
+			// Restore focus
+			if (state.lastFocusedElement) {
+				state.lastFocusedElement.focus();
 			}
 		}
-	}
-});
+	};
 
-// Intersection Observer for fade-in animations
-const observerOptions = {
-	threshold: 0.1,
-	rootMargin: '0px 0px -50px 0px'
-};
+	// Expose Modal API globally for HTML onclick handlers
+	window.openModal = Modal.open;
+	window.closeModal = Modal.close;
 
-const observer = new IntersectionObserver((entries) => {
-	entries.forEach(entry => {
-		if (entry.isIntersecting) {
-			entry.target.classList.add('visible');
-		}
-	});
-}, observerOptions);
-
-// Observe all sections for animations
-document.addEventListener('DOMContentLoaded', () => {
-	// Show page after fonts and critical content loaded
-	document.body.classList.add('loaded');
-
-	const animatedElements = document.querySelectorAll('section > div');
-	animatedElements.forEach(el => {
-		el.classList.add('fade-in-up');
-		observer.observe(el);
-	});
-
-	// Lazy load videos on viewport enter
-	const videos = document.querySelectorAll('video[loading="lazy"]');
-	const videoObserver = new IntersectionObserver((entries) => {
-		entries.forEach(entry => {
-			if (entry.isIntersecting) {
-				const video = entry.target;
-				video.play().catch(() => { });
-				videoObserver.unobserve(video);
-			}
-		});
-	});
-	videos.forEach(video => videoObserver.observe(video));
-});
-
-// Spotlight Effect
-document.addEventListener('mousemove', e => {
-	const cards = document.getElementsByClassName('spotlight-card');
-	for (const card of cards) {
-		const rect = card.getBoundingClientRect();
-		const x = e.clientX - rect.left;
-		const y = e.clientY - rect.top;
-
-		card.style.setProperty('--mouse-x', `${x}px`);
-		card.style.setProperty('--mouse-y', `${y}px`);
-	}
-});
-
-// Hero Video Rotation System
-const heroVideo = document.getElementById('heroVideo');
-const videoSources = [
-	VIDEO_CONFIG.getPath('hero'),
-	VIDEO_CONFIG.getPath('analytics'),
-	VIDEO_CONFIG.getPath('errorHandler')
-];
-let currentVideoIndex = 0;
-let rotationTimeout = null;
-const preloadedVideos = new Set([videoSources[0]]); // Track preloaded videos
-
-// Preload next video for smooth transitions (once per video)
-function preloadNextVideo() {
-	const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-	const nextSrc = videoSources[nextIndex];
-
-	if (!preloadedVideos.has(nextSrc)) {
-		const link = document.createElement('link');
-		link.rel = 'prefetch';
-		link.as = 'video';
-		link.href = nextSrc;
-		document.head.appendChild(link);
-		preloadedVideos.add(nextSrc);
-	}
-}
-
-function scheduleNextRotation() {
-	const currentVideo = videoSources[currentVideoIndex];
-	const isAnalytics = currentVideo === VIDEO_CONFIG.getPath('analytics');
-
-	if (isAnalytics) {
-		// For analytics, wait for video to end naturally
-		// Event listener will handle rotation
-		return;
-	} else {
-		// For hero-video and error_handler, rotate after 10 seconds
-		if (rotationTimeout) clearTimeout(rotationTimeout);
-		rotationTimeout = setTimeout(() => {
-			rotateVideo();
-		}, 10000);
-	}
-}
-
-function rotateVideo() {
-	currentVideoIndex = (currentVideoIndex + 1) % videoSources.length;
-	const nextVideoSrc = videoSources[currentVideoIndex];
-	const isAnalytics = nextVideoSrc === VIDEO_CONFIG.getPath('analytics');
-
-	// Fade out
-	heroVideo.style.opacity = '0';
-
-	setTimeout(() => {
-		// Change source
-		const source = heroVideo.querySelector('source');
-		source.src = nextVideoSrc;
-
-		// For analytics.mp4, disable loop to play once completely
-		if (isAnalytics) {
-			heroVideo.loop = false;
-			heroVideo.removeAttribute('loop');
-		} else {
-			heroVideo.loop = true;
-			heroVideo.setAttribute('loop', '');
+	// Global Event Listeners for Modals
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') {
+			const activeModal = document.querySelector('.modal.active');
+			if (activeModal) Modal.close(activeModal.id);
 		}
 
-		heroVideo.load();
+		// Focus Trap inside Modal
+		if (event.key === 'Tab') {
+			const activeModal = document.querySelector('.modal.active');
+			if (activeModal) {
+				const focusables = activeModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+				const first = focusables[0];
+				const last = focusables[focusables.length - 1];
 
-		// Play and fade in
-		heroVideo.play().then(() => {
-			heroVideo.style.opacity = '0.5';
-			preloadNextVideo();
-			scheduleNextRotation();
-		}).catch(err => {
-			console.log('Video playback error:', err);
-			heroVideo.style.opacity = '0.5';
-			scheduleNextRotation();
-		});
-	}, 800);
-}
-
-// Handle video end event for analytics.mp4
-function handleVideoEnd() {
-	const currentVideo = videoSources[currentVideoIndex];
-	if (currentVideo === VIDEO_CONFIG.getPath('analytics')) {
-		// Analytics finished playing, rotate to error_handler
-		setTimeout(() => {
-			rotateVideo();
-		}, 100);
-	}
-}
-
-// Initialize video rotation system
-if (heroVideo) {
-	preloadNextVideo();
-	heroVideo.addEventListener('ended', handleVideoEnd);
-	scheduleNextRotation();
-
-	// Optimize video quality based on connection
-	if ('connection' in navigator) {
-		const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-		if (connection && connection.effectiveType) {
-			// For slow connections, reduce video loading priority
-			if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
-				heroVideo.preload = 'metadata';
+				if (event.shiftKey) {
+					if (document.activeElement === first) {
+						last.focus();
+						event.preventDefault();
+					}
+				} else {
+					if (document.activeElement === last) {
+						first.focus();
+						event.preventDefault();
+					}
+				}
 			}
 		}
-	}
-}
+	});
+
+	// --- Animation System ---
+	const Animation = {
+		init: function () {
+			if (state.isReducedMotion) return;
+
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('visible');
+						observer.unobserve(entry.target); // Optimize: stop observing once visible
+					}
+				});
+			}, CONFIG.observer);
+
+			document.querySelectorAll('section > div').forEach(el => {
+				el.classList.add('fade-in-up');
+				observer.observe(el);
+			});
+		}
+	};
+
+	// --- Spotlight Effect (Optimized) ---
+	const Spotlight = {
+		init: function () {
+			if (state.isReducedMotion || window.matchMedia('(hover: none)').matches) return;
+
+			let ticking = false;
+			document.addEventListener('mousemove', (e) => {
+				if (!ticking) {
+					window.requestAnimationFrame(() => {
+						this.update(e);
+						ticking = false;
+					});
+					ticking = true;
+				}
+			}, { passive: true });
+		},
+
+		update: function (e) {
+			// Convert HTMLCollection to Array for better performance in loop if needed, 
+			// but for loop is fast enough. Caching elements.spotlightCards is key.
+			for (let i = 0; i < elements.spotlightCards.length; i++) {
+				const card = elements.spotlightCards[i];
+				const rect = card.getBoundingClientRect();
+				const x = e.clientX - rect.left;
+				const y = e.clientY - rect.top;
+
+				card.style.setProperty('--mouse-x', `${x}px`);
+				card.style.setProperty('--mouse-y', `${y}px`);
+			}
+		}
+	};
+
+	// --- Video System ---
+	const VideoManager = {
+		init: function () {
+			if (!elements.heroVideo) return;
+
+			// Network-aware loading
+			if ('connection' in navigator) {
+				const conn = navigator.connection;
+				if (conn && (conn.saveData || conn.effectiveType.includes('2g'))) {
+					elements.heroVideo.preload = 'none';
+					return; // Don't auto-play heavy videos on slow connections
+				}
+			}
+
+			this.preloadNext();
+			elements.heroVideo.addEventListener('ended', this.handleEnd.bind(this));
+			this.scheduleRotation();
+
+			// Lazy load other videos
+			this.initLazyLoading();
+		},
+
+		initLazyLoading: function () {
+			const lazyVideos = document.querySelectorAll('video[loading="lazy"]');
+			if ('IntersectionObserver' in window) {
+				const videoObserver = new IntersectionObserver((entries) => {
+					entries.forEach(entry => {
+						if (entry.isIntersecting) {
+							const video = entry.target;
+							// Only play if not already playing
+							if (video.paused) {
+								video.play().catch(() => { });
+							}
+							videoObserver.unobserve(video);
+						}
+					});
+				});
+				lazyVideos.forEach(v => videoObserver.observe(v));
+			}
+		},
+
+		preloadNext: function () {
+			const nextIndex = (state.currentVideoIndex + 1) % Object.keys(CONFIG.video.files).length;
+			const keys = Object.keys(CONFIG.video.files);
+			const nextSrc = getVideoPath(keys[nextIndex]);
+
+			if (!state.preloadedVideos.has(nextSrc)) {
+				const link = document.createElement('link');
+				link.rel = 'prefetch';
+				link.as = 'video';
+				link.href = nextSrc;
+				document.head.appendChild(link);
+				state.preloadedVideos.add(nextSrc);
+			}
+		},
+
+		scheduleRotation: function () {
+			const keys = Object.keys(CONFIG.video.files);
+			const currentKey = keys[state.currentVideoIndex];
+			const isAnalytics = CONFIG.video.files[currentKey] === CONFIG.video.files.analytics;
+
+			if (isAnalytics) return; // Wait for 'ended' event
+
+			if (state.rotationTimeout) clearTimeout(state.rotationTimeout);
+			state.rotationTimeout = setTimeout(() => this.rotate(), CONFIG.video.rotationInterval);
+		},
+
+		rotate: function () {
+			const keys = Object.keys(CONFIG.video.files);
+			state.currentVideoIndex = (state.currentVideoIndex + 1) % keys.length;
+			const nextKey = keys[state.currentVideoIndex];
+			const nextSrc = getVideoPath(nextKey);
+			const isAnalytics = nextKey === 'analytics';
+
+			elements.heroVideo.style.opacity = '0';
+
+			setTimeout(() => {
+				const source = elements.heroVideo.querySelector('source');
+				if (!source) return;
+
+				source.src = nextSrc;
+				elements.heroVideo.loop = !isAnalytics;
+				if (isAnalytics) {
+					elements.heroVideo.removeAttribute('loop');
+				} else {
+					elements.heroVideo.setAttribute('loop', '');
+				}
+
+				elements.heroVideo.load();
+				elements.heroVideo.play()
+					.then(() => {
+						elements.heroVideo.style.opacity = '0.5';
+						this.preloadNext();
+						this.scheduleRotation();
+					})
+					.catch(err => {
+						console.warn('Video rotation failed:', err);
+						elements.heroVideo.style.opacity = '0.5';
+						this.scheduleRotation(); // Try next rotation anyway
+					});
+			}, CONFIG.video.fadeDuration);
+		},
+
+		handleEnd: function () {
+			const keys = Object.keys(CONFIG.video.files);
+			const currentKey = keys[state.currentVideoIndex];
+			if (currentKey === 'analytics') {
+				setTimeout(() => this.rotate(), 100);
+			}
+		}
+	};
+
+	// --- Initialization ---
+	document.addEventListener('DOMContentLoaded', () => {
+		document.body.classList.add('loaded');
+		Animation.init();
+		Spotlight.init();
+		VideoManager.init();
+	});
+
+})();
