@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForgeGrid</title>
+    <title>ForgeGrid — Autonomous Production Intelligence</title>
     <meta name="description"
         content="ForgeGrid automatyzuje zarządzanie produkcją i optymalizuje przydział zadań w czasie rzeczywistym. Redukcja strat przy awarii o 93% dzięki inteligentnemu planowaniu.">
 
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="hero-video.mp4" as="video" type="video/mp4">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Particles.js for Cyber Effect -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <!-- Custom Tailwind Configuration -->
     <script>
@@ -17,55 +23,116 @@
             theme: {
                 extend: {
                     colors: {
-                        'failsafe-dark': '#0A0E27',
-                        'failsafe-darker': '#060911',
-                        'failsafe-blue': '#3B82F6',
-                        'failsafe-cyan': '#06B6D4',
-                        'failsafe-purple': '#8B5CF6',
+                        'cyber-dark': '#0a0e1a',
+                        'cyber-darker': '#050810',
+                        'cyber-green': '#00ff9f',
+                        'cyber-amber': '#ffb84d',
+                        'cyber-blue': '#00d4ff',
+                        'cyber-purple': '#a855f7',
+                        'cyber-slate': '#1e293b',
                     },
                     fontFamily: {
-                        'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'Consolas', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'glow-pulse': 'glowPulse 2s ease-in-out infinite',
+                        'scan': 'scan 8s linear infinite',
                     },
                 }
             }
         }
     </script>
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts - JetBrains Mono + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
+            background: #050810;
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #06B6D4 100%);
+            background: linear-gradient(135deg, #00ff9f 0%, #00d4ff 50%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: glowPulse 3s ease-in-out infinite;
         }
 
-        .glow-blue {
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 8px rgba(0, 255, 159, 0.6));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 20px rgba(0, 255, 159, 0.9));
+            }
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff9f, transparent);
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .glow-green {
+            box-shadow: 0 0 30px rgba(0, 255, 159, 0.4), 0 0 60px rgba(0, 255, 159, 0.2);
+        }
+
+        .glow-amber {
+            box-shadow: 0 0 30px rgba(255, 184, 77, 0.4), 0 0 60px rgba(255, 184, 77, 0.2);
         }
 
         .hero-gradient {
-            background: radial-gradient(ellipse at top, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            background: radial-gradient(ellipse at top, rgba(0, 255, 159, 0.08) 0%, transparent 50%);
         }
 
         .hero-text-shadow {
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.95), 0 2px 15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 0 20px rgba(0, 255, 159, 0.5), 0 4px 30px rgba(0, 0, 0, 0.9);
         }
 
         .grid-pattern {
             background-image:
-                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(rgba(0, 255, 159, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 159, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
 
         @keyframes float {
@@ -85,18 +152,19 @@
         }
 
         .screenshot-placeholder {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: linear-gradient(135deg, #1e293b 0%, #0a0e1a 100%);
+            border: 1px solid rgba(0, 255, 159, 0.2);
         }
 
         .screenshot-container {
             cursor: zoom-in;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
         }
 
         .screenshot-container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+            transform: scale(1.02) translateZ(0);
+            box-shadow: 0 20px 60px rgba(0, 255, 159, 0.3), 0 0 80px rgba(0, 255, 159, 0.1);
         }
 
         .screenshot-container img,
@@ -113,8 +181,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(6, 9, 17, 0.95);
-            backdrop-filter: blur(10px);
+            background-color: rgba(5, 8, 16, 0.97);
+            backdrop-filter: blur(20px) saturate(180%);
         }
 
         .modal.active {
@@ -159,8 +227,9 @@
         }
 
         .modal-close:hover {
-            background: rgba(59, 130, 246, 0.3);
+            background: rgba(0, 255, 159, 0.3);
             transform: rotate(90deg);
+            box-shadow: 0 0 20px rgba(0, 255, 159, 0.5);
         }
 
         @keyframes zoomIn {
@@ -177,33 +246,37 @@
     </style>
 </head>
 
-<body class="bg-failsafe-darker text-gray-100 antialiased">
+<body class="bg-cyber-darker text-gray-100 antialiased">
+
+    <!-- Scan Line Effect -->
+    <div class="scan-line"></div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full top-0 z-50 bg-failsafe-darker/80 backdrop-blur-xl border-b border-white/5">
+    <nav class="fixed w-full top-0 z-50 bg-cyber-darker/90 backdrop-blur-xl border-b border-cyber-green/10">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="8" height="8" rx="2" fill="#3B82F6" />
-                        <rect x="13" y="3" width="8" height="8" rx="2" fill="#8B5CF6" />
-                        <rect x="3" y="13" width="8" height="8" rx="2" fill="#06B6D4" />
-                        <rect x="13" y="13" width="8" height="8" rx="2" fill="#3B82F6" fill-opacity="0.5" />
+                        <rect x="3" y="3" width="8" height="8" rx="2" fill="#00ff9f" />
+                        <rect x="13" y="3" width="8" height="8" rx="2" fill="#00d4ff" />
+                        <rect x="3" y="13" width="8" height="8" rx="2" fill="#ffb84d" />
+                        <rect x="13" y="13" width="8" height="8" rx="2" fill="#00ff9f" fill-opacity="0.3" />
                     </svg>
-                    <span class="text-xl font-bold">ForgeGrid</span>
+                    <span class="text-xl font-bold font-mono tracking-tight">FORGE<span
+                            class="text-cyber-green">GRID</span></span>
                 </div>
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#platform"
-                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Platforma</a>
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-medium font-mono uppercase tracking-wider">Platforma</a>
                     <a href="#capabilities"
-                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Możliwości</a>
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-medium font-mono uppercase tracking-wider">Możliwości</a>
                     <a href="#team"
-                        class="text-gray-400 hover:text-white transition-colors text-sm font-medium">Zespół</a>
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-medium font-mono uppercase tracking-wider">Zespół</a>
                 </div>
                 <div class="flex items-center gap-4">
                     <a href="https://netbr3ak.github.io/internal-machine-monitor/"
-                        class="px-5 py-2 bg-failsafe-blue hover:bg-blue-600 rounded-lg text-sm font-semibold transition-all">
-                        Demo
+                        class="px-6 py-2.5 bg-cyber-green/10 hover:bg-cyber-green/20 border border-cyber-green/50 hover:border-cyber-green text-cyber-green rounded-lg text-sm font-bold font-mono uppercase tracking-wider transition-all duration-300 glow-green">
+                        DEMO_LIVE
                     </a>
                 </div>
             </div>
@@ -212,27 +285,29 @@
 
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden grid-pattern">
-        <div class="absolute inset-0 w-full h-full overflow-hidden 
-             **px-12 md:px-24 pt-32 md:pt-32 pb-8 md:pb-16**">
-            <div class="relative w-full h-full rounded-3xl overflow-hidden">
-                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-50">
+        <!-- Particles Background -->
+        <div id="particles-js"></div>
+
+        <div class="absolute inset-0 w-full h-full overflow-hidden px-12 md:px-24 pt-32 md:pt-32 pb-8 md:pb-16">
+            <div class="relative w-full h-full rounded-3xl overflow-hidden border border-cyber-green/10">
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-40">
                     <source src="hero-video.mp4" type="video/mp4">
                 </video>
 
                 <div
-                    class="absolute inset-0 bg-gradient-to-b from-failsafe-darker/60 via-failsafe-darker/50 to-failsafe-darker/55">
+                    class="absolute inset-0 bg-gradient-to-b from-cyber-darker/70 via-cyber-darker/60 to-cyber-darker/70">
                 </div>
             </div>
         </div>
-        <div class="hero-gradient absolute inset-0 opacity-50"></div>
+        <div class="hero-gradient absolute inset-0 opacity-60"></div>
 
         <div class="relative max-w-7xl mx-auto px-6 lg:px-8 py-32 text-center z-10">
             <div class="space-y-8">
                 <!-- Main Headline -->
-                <h1 class="text-4xl md:text-5xl font-bold leading-tight">
-                    Zero paniki.
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight font-mono">
+                    <span class="text-cyber-green">ZERO_PANIC</span>
                     <br />
-                    <span class="gradient-text">Plan gotowy w 3 sekundy.</span>
+                    <span class="gradient-text text-4xl md:text-6xl">PLAN_READY_IN_3SEC</span>
                 </h1>
 
                 <!-- Subheadline -->
@@ -243,30 +318,34 @@
                 </p>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
                     <a href="https://netbr3ak.github.io/internal-machine-monitor/"
-                        class="px-8 py-4 bg-failsafe-blue hover:bg-blue-600 rounded-lg font-semibold text-lg transition-all glow-blue w-full sm:w-auto">
-                        Zobacz Demo
+                        class="px-10 py-5 bg-cyber-green text-cyber-darker hover:bg-cyber-green/90 rounded-lg font-bold text-lg font-mono uppercase tracking-wider transition-all duration-300 glow-green w-full sm:w-auto transform hover:scale-105">
+                        ▶ LAUNCH_DEMO
                     </a>
                 </div>
 
                 <!-- Stats -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto">
-                    <div class="space-y-2 p-4 rounded-xl bg-black/30 backdrop-blur-sm border border-white/5">
-                        <div class="text-3xl md:text-4xl font-bold gradient-text">93%</div>
-                        <div class="text-sm text-gray-400 uppercase tracking-wider">Mniej strat przy awarii</div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-20 max-w-5xl mx-auto">
+                    <div
+                        class="space-y-3 p-6 rounded-lg bg-cyber-dark/50 backdrop-blur-md border border-cyber-green/20 hover:border-cyber-green/50 transition-all duration-300 group">
+                        <div class="text-4xl md:text-5xl font-bold text-cyber-green font-mono">93%</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest font-mono">LOSS_REDUCTION</div>
                     </div>
-                    <div class="space-y-2 p-4 rounded-xl bg-black/30 backdrop-blur-sm border border-white/5">
-                        <div class="text-3xl md:text-4xl font-bold gradient-text">3 sek</div>
-                        <div class="text-sm text-gray-400 uppercase tracking-wider">Nowy plan produkcji</div>
+                    <div
+                        class="space-y-3 p-6 rounded-lg bg-cyber-dark/50 backdrop-blur-md border border-cyber-blue/20 hover:border-cyber-blue/50 transition-all duration-300 group">
+                        <div class="text-4xl md:text-5xl font-bold text-cyber-blue font-mono">3SEC</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest font-mono">REPLAN_TIME</div>
                     </div>
-                    <div class="space-y-2 p-4 rounded-xl bg-black/30 backdrop-blur-sm border border-white/5">
-                        <div class="text-3xl md:text-4xl font-bold gradient-text">Real-Time</div>
-                        <div class="text-sm text-gray-400 uppercase tracking-wider">Automatyzacja</div>
+                    <div
+                        class="space-y-3 p-6 rounded-lg bg-cyber-dark/50 backdrop-blur-md border border-cyber-amber/20 hover:border-cyber-amber/50 transition-all duration-300 group">
+                        <div class="text-3xl md:text-4xl font-bold text-cyber-amber font-mono">REALTIME</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest font-mono">AUTOMATION</div>
                     </div>
-                    <div class="space-y-2 p-4 rounded-xl bg-black/30 backdrop-blur-sm border border-white/5">
-                        <div class="text-3xl md:text-4xl font-bold gradient-text">Zero</div>
-                        <div class="text-sm text-gray-400 uppercase tracking-wider">Ręcznego planowania</div>
+                    <div
+                        class="space-y-3 p-6 rounded-lg bg-cyber-dark/50 backdrop-blur-md border border-cyber-purple/20 hover:border-cyber-purple/50 transition-all duration-300 group">
+                        <div class="text-4xl md:text-5xl font-bold text-cyber-purple font-mono">ZERO</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-widest font-mono">MANUAL_WORK</div>
                     </div>
                 </div>
             </div>
@@ -274,7 +353,7 @@
 
         <!-- Scroll Indicator -->
         <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10">
-            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 text-cyber-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3">
                 </path>
             </svg>
@@ -282,12 +361,13 @@
     </section>
 
     <!-- Platform Overview -->
-    <section id="platform" class="relative py-32 bg-failsafe-dark">
+    <section id="platform" class="relative py-32 bg-cyber-dark">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-5 gap-16 items-center">
                 <div class="space-y-6 lg:col-span-2">
-                    <div class="inline-block px-4 py-2 bg-failsafe-blue/10 border border-failsafe-blue/20 rounded-full">
-                        <span class="text-sm text-failsafe-blue font-semibold">INTELIGENTNE PLANOWANIE</span>
+                    <div class="inline-block px-4 py-2 bg-cyber-green/10 border border-cyber-green/30 rounded">
+                        <span
+                            class="text-xs text-cyber-green font-bold font-mono tracking-widest">INTELLIGENT_PLANNING</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight">
                         Cała produkcja
@@ -300,8 +380,7 @@
                     </p>
                     <ul class="space-y-4 pt-4">
                         <li class="flex items-start gap-3">
-                            <svg class="w-6 h-6 text-failsafe-blue shrink-0 mt-1" fill="currentColor"
-                                viewBox="0 0 20 20">
+                            <svg class="w-6 h-6 text-cyber-green shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
@@ -314,8 +393,7 @@
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <svg class="w-6 h-6 text-failsafe-blue shrink-0 mt-1" fill="currentColor"
-                                viewBox="0 0 20 20">
+                            <svg class="w-6 h-6 text-cyber-green shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
@@ -327,8 +405,7 @@
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <svg class="w-6 h-6 text-failsafe-blue shrink-0 mt-1" fill="currentColor"
-                                viewBox="0 0 20 20">
+                            <svg class="w-6 h-6 text-cyber-green shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd" />
@@ -343,7 +420,7 @@
 
                 <!-- Dashboard Video -->
                 <div class="relative lg:col-span-3">
-                    <div class="screenshot-container rounded-2xl overflow-hidden border border-white/10"
+                    <div class="screenshot-container rounded-2xl overflow-hidden border border-cyber-green/10"
                         onclick="openModal('dashboardModal')">
                         <video autoplay loop muted playsinline class="w-full h-full object-cover">
                             <source src="hero-video.mp4" type="video/mp4">
@@ -351,7 +428,7 @@
                         </video>
                     </div>
                     <div
-                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-failsafe-blue/20 rounded-full blur-3xl pointer-events-none">
+                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-cyber-green/20 rounded-full blur-3xl pointer-events-none">
                     </div>
                     <div
                         class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-gray-300 pointer-events-none">
@@ -370,13 +447,13 @@
     </section>
 
     <!-- Predictive Intelligence -->
-    <section class="relative py-32 bg-failsafe-darker overflow-hidden">
+    <section class="relative py-32 bg-cyber-darker overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-5 gap-16 items-center">
 
                 <!-- Dashboard Video -->
                 <div class="relative lg:col-span-3">
-                    <div class="screenshot-container rounded-2xl overflow-hidden border border-white/10"
+                    <div class="screenshot-container rounded-2xl overflow-hidden border border-cyber-green/10"
                         onclick="openModal('dashboardModal')">
                         <video autoplay loop muted playsinline class="w-full h-full object-cover">
                             <source src="error_handler.mp4" type="video/mp4">
@@ -384,7 +461,7 @@
                         </video>
                     </div>
                     <div
-                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-failsafe-blue/20 rounded-full blur-3xl pointer-events-none">
+                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-cyber-green/20 rounded-full blur-3xl pointer-events-none">
                     </div>
                     <div
                         class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-gray-300 pointer-events-none">
@@ -400,9 +477,8 @@
                 </div>
 
                 <div class="space-y-6 order-1 lg:order-2 lg:col-span-2">
-                    <div
-                        class="inline-block px-4 py-2 bg-failsafe-purple/10 border border-failsafe-purple/20 rounded-full">
-                        <span class="text-sm text-failsafe-purple font-semibold">RZECZYWISTY WPŁYW</span>
+                    <div class="inline-block px-4 py-2 bg-cyber-purple/10 border border-cyber-purple/20 rounded-full">
+                        <span class="text-sm text-cyber-purple font-semibold">RZECZYWISTY WPŁYW</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight">
                         Każda awaria
@@ -416,17 +492,17 @@
                         minimalizując straty i zapewniając ciągłość produkcji.
                     </p>
                     <div class="grid sm:grid-cols-2 gap-6 pt-4">
-                        <div class="p-6 bg-white/5 border border-white/10 rounded-xl">
+                        <div class="p-6 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl">
                             <div class="text-3xl font-bold text-red-400 mb-2">30 minut</div>
                             <div class="text-sm text-gray-400">Tradycyjne ręczne planowanie</div>
                         </div>
-                        <div class="p-6 bg-white/5 border border-white/10 rounded-xl">
+                        <div class="p-6 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl">
                             <div class="text-3xl font-bold text-green-400 mb-2">2 minuty</div>
                             <div class="text-sm text-gray-400">ForgeGrid - automatyczna reakcja</div>
                         </div>
                     </div>
                     <div
-                        class="p-6 bg-gradient-to-r from-failsafe-blue/10 to-failsafe-purple/10 border border-white/10 rounded-xl mt-4">
+                        class="p-6 bg-gradient-to-r from-cyber-green/10 to-cyber-purple/10 border border-cyber-green/10 rounded-xl mt-4">
                         <div class="text-2xl font-bold text-green-400 mb-1">93% redukcja czasu przestoju</div>
                         <div class="text-sm text-gray-400">Przy dużej skali produkcji - zwrot z inwestycji może zostać
                             osiągnięty nawet po kilku tygodniach</div>
@@ -436,12 +512,12 @@
         </div>
     </section>
 
-    <section class="relative py-32 bg-failsafe-dark">
+    <section class="relative py-32 bg-cyber-dark">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-5 gap-16 items-center">
                 <div class="space-y-6 lg:col-span-2">
-                    <div class="inline-block px-4 py-2 bg-failsafe-cyan/10 border border-failsafe-cyan/20 rounded-full">
-                        <span class="text-sm text-failsafe-cyan font-semibold">ANALITYKA</span>
+                    <div class="inline-block px-4 py-2 bg-cyber-blue/10 border border-cyber-blue/20 rounded-full">
+                        <span class="text-sm text-cyber-blue font-semibold">ANALITYKA</span>
                     </div>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight">
                         Wszystkie wskaźniki
@@ -453,9 +529,10 @@
                         trendy awaryjności na interaktywnych wykresach.
                     </p>
                     <div class="space-y-4 pt-4">
-                        <div class="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-lg">
+                        <div
+                            class="flex items-center gap-4 p-4 bg-cyber-dark/40 border border-cyber-green/10 rounded-lg">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-failsafe-cyan to-failsafe-blue rounded-lg flex items-center justify-center">
+                                class="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-green rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path
                                         d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
@@ -466,9 +543,10 @@
                                 <div class="text-sm text-gray-400">Interaktywne wykresy obciążenia hali i maszyn</div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-lg">
+                        <div
+                            class="flex items-center gap-4 p-4 bg-cyber-dark/40 border border-cyber-green/10 rounded-lg">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-failsafe-purple to-failsafe-cyan rounded-lg flex items-center justify-center">
+                                class="w-12 h-12 bg-gradient-to-br from-cyber-purple to-cyber-blue rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
@@ -481,9 +559,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-lg">
+                        <div
+                            class="flex items-center gap-4 p-4 bg-cyber-dark/40 border border-cyber-green/10 rounded-lg">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-failsafe-blue to-failsafe-purple rounded-lg flex items-center justify-center">
+                                class="w-12 h-12 bg-gradient-to-br from-cyber-green to-cyber-purple rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
                                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
@@ -499,7 +578,7 @@
                 </div>
 
                 <div class="relative lg:col-span-3">
-                    <div class="screenshot-container rounded-2xl overflow-hidden border border-white/10"
+                    <div class="screenshot-container rounded-2xl overflow-hidden border border-cyber-green/10"
                         onclick="openModal('dashboardModal')">
                         <video autoplay loop muted playsinline class="w-full h-full object-cover">
                             <source src="analytics.mp4" type="video/mp4">
@@ -507,7 +586,7 @@
                         </video>
                     </div>
                     <div
-                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-failsafe-cyan/20 rounded-full blur-3xl pointer-events-none">
+                        class="absolute -bottom-6 -right-6 w-32 h-32 bg-cyber-blue/20 rounded-full blur-3xl pointer-events-none">
                     </div>
                     <div
                         class="absolute top-4 right-4 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-gray-300 pointer-events-none">
@@ -526,7 +605,7 @@
     </section>
 
     <!-- Capabilities Grid -->
-    <section id="capabilities" class="relative py-32 bg-failsafe-darker">
+    <section id="capabilities" class="relative py-32 bg-cyber-darker">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
@@ -541,25 +620,27 @@
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Capability Cards -->
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-blue to-failsafe-purple rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-green to-cyber-purple rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-blue transition-colors">Błyskawiczna
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-green transition-colors">Błyskawiczna
                         Reakcja</h3>
                     <p class="text-gray-400">
                         3 sekundy na reorganizację planu przy awarii. Żadnych przestojów w planowaniu.
                     </p>
                 </div>
 
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-purple to-failsafe-cyan rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-purple to-cyber-blue rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
@@ -568,7 +649,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-purple transition-colors">Błyskawiczny
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-purple transition-colors">Błyskawiczny
                         zwrot z inwestycji</h3>
                     <p class="text-gray-400">
                         Nawet 93% redukcja strat przy awarii. Automatyzacja sprawia, że inwestycja zwraca się w bardzo
@@ -576,9 +657,10 @@
                     </p>
                 </div>
 
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-cyan to-failsafe-blue rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-green rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                             <path fill-rule="evenodd"
@@ -586,38 +668,40 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-cyan transition-colors">Widoczność w
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-blue transition-colors">Widoczność w
                         czasie rzeczywistym</h3>
                     <p class="text-gray-400">
                         Status każdej maszyny, kolejki zadań, ETA - wszystko na żywo w jednym dashboard.
                     </p>
                 </div>
 
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-blue to-failsafe-cyan rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-green to-cyber-blue rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-blue transition-colors">Automatyczne
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-green transition-colors">Automatyczne
                         Planowanie</h3>
                     <p class="text-gray-400">
                         Koniec z ręcznym przydzielaniem. System optymalizuje każde nowe zlecenie natychmiast.
                     </p>
                 </div>
 
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-purple to-failsafe-blue rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-purple to-cyber-green rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-purple transition-colors">Metryki OEE
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-purple transition-colors">Metryki OEE
                     </h3>
                     <p class="text-gray-400">
                         Obciążenie maszyn, wykorzystanie, przepustowość - wszystkie kluczowe wskaźniki w czasie
@@ -625,16 +709,17 @@
                     </p>
                 </div>
 
-                <div class="p-8 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all group">
+                <div
+                    class="p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-xl hover:bg-cyber-green/5 transition-all group">
                     <div
-                        class="w-12 h-12 bg-gradient-to-br from-failsafe-cyan to-failsafe-purple rounded-lg mb-4 flex items-center justify-center">
+                        class="w-12 h-12 bg-gradient-to-br from-cyber-blue to-cyber-purple rounded-lg mb-4 flex items-center justify-center">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 group-hover:text-failsafe-cyan transition-colors">Zero Paniki</h3>
+                    <h3 class="text-xl font-bold mb-2 group-hover:text-cyber-blue transition-colors">Zero Paniki</h3>
                     <p class="text-gray-400">
                         Gdy maszyna padnie - system sam przeorganizuje plan. Planista dostaje gotowe rozwiązanie.
                     </p>
@@ -644,7 +729,7 @@
     </section>
 
     <!-- Team Section -->
-    <section id="team" class="relative py-32 bg-failsafe-darker">
+    <section id="team" class="relative py-32 bg-cyber-darker">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-3">Zaprojektowane przez</h2>
@@ -654,7 +739,7 @@
                 <!-- Mateusz Pawlik -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -665,7 +750,7 @@
                         <h3 class="font-semibold text-sm mb-1">Mateusz Pawlik</h3>
                         <p class="text-xs text-gray-500 mb-3">Specjalista Wsparcia Technicznego</p>
                         <a href="https://pl.linkedin.com/in/mateusz-pawlik-08527b283"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -678,7 +763,7 @@
                 <!-- Agata Syc -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -688,7 +773,7 @@
                         <h3 class="font-semibold text-sm mb-1">Agata Syc</h3>
                         <p class="text-xs text-gray-500 mb-3">COO at Aigorithmics</p>
                         <a href="https://pl.linkedin.com/in/agata-syc-8ab963a5"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -701,7 +786,7 @@
                 <!-- Franciszek Głąb -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -712,7 +797,7 @@
                         <h3 class="font-semibold text-sm mb-1">Franciszek Głąb</h3>
                         <p class="text-xs text-gray-500 mb-3">Inżynier Bezpieczeństwa</p>
                         <a href="https://pl.linkedin.com/in/franciszek-g%C5%82%C4%85b"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -725,7 +810,7 @@
                 <!-- Dominik Kamiński -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -736,7 +821,7 @@
                         <h3 class="font-semibold text-sm mb-1">Dominik Kamiński</h3>
                         <p class="text-xs text-gray-500 mb-3">Programista</p>
                         <a href="https://pl.linkedin.com/in/dominik-kami%C5%84ski-46b56b224"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -749,7 +834,7 @@
                 <!-- Rafał Tomaszewski -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -760,7 +845,7 @@
                         <h3 class="font-semibold text-sm mb-1">Rafał Tomaszewski</h3>
                         <p class="text-xs text-gray-500 mb-3">Tester Oprogramowania</p>
                         <a href="https://pl.linkedin.com/in/rafa%C5%82-tomaszewski2"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -773,7 +858,7 @@
                 <!-- Szymon Jędryczko -->
                 <div class="group">
                     <div
-                        class="relative bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all text-center">
+                        class="relative bg-cyber-dark/40 border border-cyber-green/10 rounded-xl p-6 hover:bg-cyber-green/5 transition-all text-center">
                         <div class="mb-4">
                             <div
                                 class="w-32 h-32 mx-auto bg-white/10 rounded-lg overflow-hidden border border-white/20">
@@ -784,7 +869,7 @@
                         <h3 class="font-semibold text-sm mb-1">Szymon Jędryczko</h3>
                         <p class="text-xs text-gray-500 mb-3">Inżynier ML</p>
                         <a href="#"
-                            class="inline-flex items-center gap-1 text-xs text-failsafe-blue hover:text-blue-400 transition-colors">
+                            class="inline-flex items-center gap-1 text-xs text-cyber-green hover:text-blue-400 transition-colors">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path
                                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -798,7 +883,7 @@
     </section>
 
     <!-- Contact/Feedback Section -->
-    <section id="contact" class="relative py-32 bg-failsafe-dark">
+    <section id="contact" class="relative py-32 bg-cyber-dark">
         <div class="max-w-3xl mx-auto px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
@@ -811,32 +896,31 @@
                 </p>
             </div>
 
-            <form class="space-y-8 p-8 bg-white/5 border border-white/10 rounded-2xl"
+            <form class="space-y-8 p-8 bg-cyber-dark/40 border border-cyber-green/10 rounded-2xl"
                 action="https://formspree.io/f/xkgezdja" method="POST">
                 <!-- Form Question 1 -->
                 <div class="space-y-3">
                     <label class="block text-sm font-semibold">Czy pomysł projektu Ci się podoba?</label>
                     <div class="space-y-2">
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="radio" name="idea_rating" value="zdecydowanie_tak" required
-                                class="w-4 h-4 text-failsafe-blue">
+                                class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Zdecydowanie tak</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="idea_rating" value="tak" class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="idea_rating" value="tak" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Tak</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="idea_rating" value="neutralnie"
-                                class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="idea_rating" value="neutralnie" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Neutralnie</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="idea_rating" value="nie" class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="idea_rating" value="nie" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Nie</span>
                         </label>
                     </div>
@@ -847,24 +931,24 @@
                     <label class="block text-sm font-semibold">Jak oceniasz prezentację produktu?</label>
                     <div class="space-y-2">
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="radio" name="ui_rating" value="bardzo_dobry" required
-                                class="w-4 h-4 text-failsafe-blue">
+                                class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Bardzo dobra</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="ui_rating" value="dobry" class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="ui_rating" value="dobry" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Dobra</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="ui_rating" value="przecietny" class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="ui_rating" value="przecietny" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Przeciętna</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
-                            <input type="radio" name="ui_rating" value="zly" class="w-4 h-4 text-failsafe-blue">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
+                            <input type="radio" name="ui_rating" value="zly" class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Słaba</span>
                         </label>
                     </div>
@@ -875,27 +959,27 @@
                     <label class="block text-sm font-semibold">Jakie cechy projektu uważasz za najważniejsze?</label>
                     <div class="space-y-2">
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="checkbox" name="features" value="monitoring"
-                                class="w-4 h-4 text-failsafe-blue rounded">
+                                class="w-4 h-4 text-cyber-green rounded">
                             <span class="text-sm">Monitoring w czasie rzeczywistym</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="checkbox" name="features" value="analityka"
-                                class="w-4 h-4 text-failsafe-blue rounded">
+                                class="w-4 h-4 text-cyber-green rounded">
                             <span class="text-sm">Analityka predykcyjna</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="checkbox" name="features" value="bezpieczenstwo"
-                                class="w-4 h-4 text-failsafe-blue rounded">
+                                class="w-4 h-4 text-cyber-green rounded">
                             <span class="text-sm">Bezpieczeństwo danych (Self-hosted)</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="checkbox" name="features" value="wydajnosc"
-                                class="w-4 h-4 text-failsafe-blue rounded">
+                                class="w-4 h-4 text-cyber-green rounded">
                             <span class="text-sm">Rozwiązanie Open Source</span>
                         </label>
                     </div>
@@ -905,7 +989,7 @@
                 <div class="space-y-3">
                     <label class="block text-sm font-semibold">Co by Cię przekonało do użycia ForgeGrid?</label>
                     <textarea name="improvements" rows="4"
-                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-failsafe-blue text-white placeholder-gray-500 resize-none"
+                        class="w-full px-4 py-3 bg-cyber-dark/40 border border-cyber-green/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyber-green text-white placeholder-gray-500 resize-none"
                         placeholder="Podziel się swoimi przemyśleniami..."></textarea>
                 </div>
 
@@ -914,21 +998,21 @@
                     <label class="block text-sm font-semibold">Widzisz potencjał komercyjny?</label>
                     <div class="space-y-2">
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="radio" name="commercial_potential" value="duzy" required
-                                class="w-4 h-4 text-failsafe-blue">
+                                class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Duży potencjał</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="radio" name="commercial_potential" value="sredni"
-                                class="w-4 h-4 text-failsafe-blue">
+                                class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Średni potencjał</span>
                         </label>
                         <label
-                            class="flex items-center gap-3 p-3 bg-white/5 rounded-lg cursor-pointer hover:bg-white/10 transition-colors">
+                            class="flex items-center gap-3 p-3 bg-cyber-dark/40 rounded-lg cursor-pointer hover:bg-cyber-green/5 transition-colors">
                             <input type="radio" name="commercial_potential" value="maly"
-                                class="w-4 h-4 text-failsafe-blue">
+                                class="w-4 h-4 text-cyber-green">
                             <span class="text-sm">Mały potencjał</span>
                         </label>
                     </div>
@@ -938,13 +1022,13 @@
                 <div class="space-y-3">
                     <label class="block text-sm font-semibold">Dodatkowe komentarze (opcjonalne)</label>
                     <textarea name="comments" rows="3"
-                        class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-failsafe-blue text-white placeholder-gray-500 resize-none"
+                        class="w-full px-4 py-3 bg-cyber-dark/40 border border-cyber-green/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyber-green text-white placeholder-gray-500 resize-none"
                         placeholder="Cokolwiek jeszcze chciałbyś nam powiedzieć..."></textarea>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit"
-                    class="w-full py-4 bg-gradient-to-r from-failsafe-blue to-failsafe-purple hover:from-blue-600 hover:to-purple-700 rounded-lg font-semibold text-lg transition-all glow-blue">
+                    class="w-full py-4 bg-gradient-to-r from-cyber-green to-cyber-purple hover:from-blue-600 hover:to-purple-700 rounded-lg font-semibold text-lg transition-all glow-blue">
                     Wyślij Feedback
                 </button>
 
@@ -956,34 +1040,36 @@
     </section>
 
     <!-- Footer -->
-    <footer class="relative py-12 bg-failsafe-darker border-t border-white/5">
+    <footer class="relative py-12 bg-cyber-darker border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-3">
                     <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="8" height="8" rx="2" fill="#3B82F6" />
-                        <rect x="13" y="3" width="8" height="8" rx="2" fill="#8B5CF6" />
-                        <rect x="3" y="13" width="8" height="8" rx="2" fill="#06B6D4" />
-                        <rect x="13" y="13" width="8" height="8" rx="2" fill="#3B82F6" fill-opacity="0.5" />
+                        <rect x="3" y="3" width="8" height="8" rx="2" fill="#00ff9f" />
+                        <rect x="13" y="3" width="8" height="8" rx="2" fill="#00d4ff" />
+                        <rect x="3" y="13" width="8" height="8" rx="2" fill="#ffb84d" />
+                        <rect x="13" y="13" width="8" height="8" rx="2" fill="#00ff9f" fill-opacity="0.3" />
                     </svg>
-                    <span class="font-bold">ForgeGrid</span>
+                    <span class="font-bold font-mono">FORGE<span class="text-cyber-green">GRID</span></span>
                 </div>
 
                 <div class="flex items-center gap-8">
-                    <a href="https://github.com/tonyc4sh/internal-machine-monitor"
-                        class="text-gray-400 hover:text-white transition-colors text-sm">
+                    <a href="https://github.com/NetBr3ak/internal-machine-monitor"
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-mono uppercase tracking-wider">
                         GitHub
                     </a>
-                    <a href="#platform" class="text-gray-400 hover:text-white transition-colors text-sm">
-                        Platforma
+                    <a href="#platform"
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-mono uppercase tracking-wider">
+                        Platform
                     </a>
-                    <a href="#contact" class="text-gray-400 hover:text-white transition-colors text-sm">
-                        Kontakt
+                    <a href="#contact"
+                        class="text-gray-400 hover:text-cyber-green transition-all duration-300 text-sm font-mono uppercase tracking-wider">
+                        Contact
                     </a>
                 </div>
 
-                <div class="text-sm text-gray-500">
-                    © 2025 ForgeGrid. Projekt Open Source.
+                <div class="text-xs text-gray-500 font-mono uppercase tracking-wider">
+                    © 2025 FORGEGRID_v1.0 // OPEN_SOURCE
                 </div>
             </div>
         </div>
@@ -1041,6 +1127,25 @@
                     }
                 }
             }
+        });
+
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#00ff9f' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1 } },
+                size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.1 } },
+                line_linked: { enable: true, distance: 150, color: '#00ff9f', opacity: 0.2, width: 1 },
+                move: { enable: true, speed: 1, direction: 'none', random: true, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } },
+                modes: { grab: { distance: 140, line_linked: { opacity: 0.5 } }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
         });
     </script>
 
