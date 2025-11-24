@@ -35,12 +35,13 @@
                     colors: {
                         'forge-black': '#020408',
                         'forge-dark': '#0B101A',
-                        'forge-card': '#111621',
+                        'forge-card': 'rgba(17, 22, 33, 0.7)', // Transparent for glassmorphism
                         'forge-border': '#1E293B',
                         'forge-text': '#E2E8F0',
-                        'forge-muted': '#64748B',
+                        'forge-muted': '#94A3B8', // Slightly lighter for better contrast
                         'forge-accent': '#3B82F6',
-                        'forge-accent-hover': '#2563EB',
+                        'forge-accent-hover': '#60A5FA',
+                        'forge-success': '#10B981',
                     },
                     fontFamily: {
                         'mono': ['IBM Plex Mono', 'monospace'],
@@ -48,7 +49,10 @@
                     },
                     letterSpacing: {
                         'tightest': '-0.05em',
-                        'widest': '0.15em',
+                        'widest': '0.25em', // Increased for technical headers
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
                     }
                 }
             }
@@ -63,6 +67,11 @@
         rel="stylesheet">
 
     <style>
+        :root {
+            --cursor-x: 50%;
+            --cursor-y: 50%;
+        }
+
         * {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -70,22 +79,88 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #050505;
-            color: #EDEDED;
+            background: #020408;
+            color: #E2E8F0;
+            overflow-x: hidden;
         }
 
         ::selection {
-            background: #FFFFFF;
-            color: #000000;
+            background: #3B82F6;
+            color: #FFFFFF;
         }
 
+        /* Advanced Grid Background */
         .grid-bg {
-            background-size: 60px 60px;
+            background-size: 50px 50px;
             background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+                linear-gradient(to right, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 100%);
+            animation: pulse-grid 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-grid {
+            0% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Spotlight Effect */
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
+                    rgba(59, 130, 246, 0.06),
+                    transparent 40%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        .spotlight-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y),
+                    rgba(59, 130, 246, 0.4),
+                    transparent 40%);
+            z-index: 3;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+            padding: 1px;
+            /* Border width */
+        }
+
+        .spotlight-card:hover::after {
+            opacity: 1;
         }
 
         /* Minimalist Scrollbar */
@@ -94,23 +169,23 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #050505;
+            background: #020408;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #262626;
+            background: #1E293B;
             border-radius: 3px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #404040;
+            background: #3B82F6;
         }
 
         /* Fade-in animations */
         .fade-in-up {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .fade-in-up.visible {
@@ -119,12 +194,15 @@
         }
 
         .screenshot-container {
-            transition: all 0.3s ease;
-            border: 1px solid #333;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.05);
         }
 
         .screenshot-container:hover {
-            border-color: #666;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.1);
+            transform: scale(1.01);
         }
 
         /* Modal styles */
@@ -136,19 +214,37 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
+            background-color: rgba(2, 4, 8, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         .modal.active {
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal-content {
             max-width: 90%;
             max-height: 90%;
             position: relative;
+            border: 1px solid #1E293B;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .modal-content img,
@@ -156,7 +252,6 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border: 1px solid #333;
         }
 
         .modal-close {
@@ -172,6 +267,52 @@
 
         .modal-close:hover {
             opacity: 1;
+            color: #3B82F6;
+        }
+
+        /* Technical Decorations */
+        .tech-corner {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid #3B82F6;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .spotlight-card:hover .tech-corner {
+            opacity: 1;
+            width: 15px;
+            height: 15px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .tl {
+            top: -1px;
+            left: -1px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .tr {
+            top: -1px;
+            right: -1px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+
+        .bl {
+            bottom: -1px;
+            left: -1px;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .br {
+            bottom: -1px;
+            right: -1px;
+            border-left: 0;
+            border-top: 0;
         }
     </style>
 </head>
@@ -233,12 +374,21 @@
 
             <div class="relative max-w-7xl mx-auto px-6 lg:px-8 py-32 text-center z-10">
                 <div class="space-y-8">
+                    <!-- System Status Indicator -->
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forge-card border border-forge-border backdrop-blur-sm mb-4 animate-pulse">
+                        <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
+                        <span class="text-xs font-mono text-green-400 tracking-widest">SYSTEM_ONLINE // v2.4.0</span>
+                    </div>
+
                     <!-- Main Headline -->
                     <h1
                         class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight font-sans tracking-tight">
-                        <span class="text-white">PRODUKCJA STAŁA</span>
+                        <span class="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">PRODUKCJA STAŁA</span>
                         <br />
-                        <span class="text-forge-muted text-3xl sm:text-4xl md:text-5xl lg:text-6xl">REPLANNING: 3
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-forge-muted via-white to-forge-muted text-3xl sm:text-4xl md:text-5xl lg:text-6xl">REPLANNING:
+                            3
                             SEK</span>
                     </h1>
 
@@ -254,9 +404,14 @@
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
                         <a href="https://netbr3ak.github.io/internal-machine-monitor/" target="_blank"
                             rel="noopener noreferrer"
-                            class="px-10 py-4 bg-white text-black hover:bg-gray-200 rounded-sm font-bold text-lg font-sans uppercase tracking-widest transition-all duration-300 w-full sm:w-auto"
+                            class="group relative px-10 py-4 bg-white text-black hover:bg-gray-100 rounded-sm font-bold text-lg font-sans uppercase tracking-widest transition-all duration-300 w-full sm:w-auto overflow-hidden"
                             aria-label="Test ForgeGrid system - opens in new tab">
-                            ▶ TEST 2-MIN
+                            <span class="relative z-10 flex items-center gap-2">
+                                ▶ TEST 2-MIN
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700">
+                            </div>
                         </a>
                     </div>
 
@@ -264,32 +419,48 @@
                     <div
                         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-12 sm:pt-16 md:pt-20 max-w-5xl mx-auto px-4">
                         <div
-                            class="space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border hover:border-forge-accent transition-all duration-300 group hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                            class="spotlight-card space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border transition-all duration-300 group">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div
-                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors">
+                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                                 93%</div>
                             <div class="text-xs text-forge-muted uppercase tracking-widest font-sans">LOSS_REDUCTION
                             </div>
                         </div>
                         <div
-                            class="space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border hover:border-forge-accent transition-all duration-300 group hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                            class="spotlight-card space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border transition-all duration-300 group">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div
-                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors">
+                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                                 3SEC</div>
                             <div class="text-xs text-forge-muted uppercase tracking-widest font-sans">REPLAN_TIME</div>
                         </div>
                         <div
-                            class="space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border hover:border-forge-accent transition-all duration-300 group hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                            class="spotlight-card space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border transition-all duration-300 group">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div
-                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors">
+                                class="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                                 REALTIME
                             </div>
                             <div class="text-xs text-forge-muted uppercase tracking-widest font-sans">AUTOMATION</div>
                         </div>
                         <div
-                            class="space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border hover:border-forge-accent transition-all duration-300 group hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+                            class="spotlight-card space-y-2 sm:space-y-3 p-4 sm:p-6 rounded-sm bg-forge-card border border-forge-border transition-all duration-300 group">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div
-                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors">
+                                class="text-3xl sm:text-4xl md:text-5xl font-bold text-white font-mono group-hover:text-forge-accent transition-colors group-hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                                 ZERO
                             </div>
                             <div class="text-xs text-forge-muted uppercase tracking-widest font-sans">MANUAL_WORK</div>
@@ -330,7 +501,7 @@
                         <ul class="space-y-6 pt-4">
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_#22c55e]">
                                 </div>
                                 <div>
                                     <div class="font-bold text-white font-sans uppercase tracking-wide text-sm mb-1">
@@ -343,7 +514,7 @@
                             </li>
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_#22c55e]">
                                 </div>
                                 <div>
                                     <div class="font-bold text-white font-sans uppercase tracking-wide text-sm mb-1">
@@ -355,7 +526,7 @@
                             </li>
                             <li class="flex items-start gap-4">
                                 <div
-                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                                    class="mt-1 w-2 h-2 bg-forge-accent rounded-full shrink-0 shadow-[0_0_10px_#22c55e]">
                                 </div>
                                 <div>
                                     <div class="font-bold text-white font-sans uppercase tracking-wide text-sm mb-1">
@@ -560,7 +731,11 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <!-- Capability Cards -->
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -579,7 +754,11 @@
                     </div>
 
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -600,7 +779,11 @@
                     </div>
 
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -620,7 +803,11 @@
                     </div>
 
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -641,7 +828,11 @@
                     </div>
 
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -660,7 +851,11 @@
                     </div>
 
                     <div
-                        class="p-8 bg-forge-card border border-forge-border rounded-sm hover:border-forge-accent transition-all group hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                        class="spotlight-card p-8 bg-forge-card border border-forge-border rounded-sm transition-all group">
+                        <div class="tech-corner tl"></div>
+                        <div class="tech-corner tr"></div>
+                        <div class="tech-corner bl"></div>
+                        <div class="tech-corner br"></div>
                         <div
                             class="w-10 h-10 bg-forge-accent/10 rounded-sm mb-4 flex items-center justify-center text-forge-accent group-hover:bg-forge-accent group-hover:text-white transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -698,16 +893,20 @@
                     <a href="https://www.linkedin.com/in/szymon-jedryczko/" target="_blank" rel="noopener noreferrer"
                         class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/szymon_jedryczko.png" alt="Szymon Jędryczko"
-                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="160"
-                                        height="160">
+                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="128"
+                                        height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Szymon
@@ -721,7 +920,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -731,15 +930,19 @@
                     <a href="https://www.linkedin.com/in/agata-syc-8ab963a5" target="_blank" rel="noopener noreferrer"
                         class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/agata_syc.png" alt="Agata Syc" class="w-full h-full object-cover"
-                                        loading="lazy" decoding="async" width="160" height="160">
+                                        loading="lazy" decoding="async" width="128" height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Agata
@@ -753,7 +956,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -763,16 +966,20 @@
                     <a href="https://www.linkedin.com/in/dominik-kamiński-46b56b224" target="_blank"
                         rel="noopener noreferrer" class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/dominik_kaminski.png" alt="Dominik Kamiński"
-                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="160"
-                                        height="160">
+                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="128"
+                                        height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Dominik
@@ -785,7 +992,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -795,16 +1002,20 @@
                     <a href="https://www.linkedin.com/in/franciszek-głąb" target="_blank" rel="noopener noreferrer"
                         class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/franciszek_glab.png" alt="Franciszek Głąb"
-                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="160"
-                                        height="160">
+                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="128"
+                                        height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Franciszek
@@ -817,7 +1028,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -827,16 +1038,20 @@
                     <a href="https://www.linkedin.com/in/rafał-tomaszewski2" target="_blank" rel="noopener noreferrer"
                         class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/rafal_tomaszewski.png" alt="Rafał Tomaszewski"
-                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="160"
-                                        height="160">
+                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="128"
+                                        height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Rafał
@@ -848,7 +1063,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -858,16 +1073,20 @@
                     <a href="https://www.linkedin.com/in/mateusz-pawlik-08527b283" target="_blank"
                         rel="noopener noreferrer" class="group block h-full">
                         <div
-                            class="relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 hover:border-forge-accent transition-all duration-300 text-center cursor-pointer group-hover:shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            class="spotlight-card relative h-full flex flex-col bg-forge-card border border-forge-border rounded-sm p-6 transition-all duration-300 text-center cursor-pointer">
+                            <div class="tech-corner tl"></div>
+                            <div class="tech-corner tr"></div>
+                            <div class="tech-corner bl"></div>
+                            <div class="tech-corner br"></div>
                             <div class="mb-6 flex-grow flex items-center justify-center">
                                 <div
-                                    class="w-40 h-40 mx-auto bg-forge-dark rounded-sm overflow-hidden border border-forge-border group-hover:border-forge-accent/50 transition-colors grayscale group-hover:grayscale-0">
+                                    class="w-32 h-32 mx-auto bg-forge-dark rounded-full overflow-hidden border-2 border-forge-border group-hover:border-forge-accent transition-all duration-300 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                                     <img src="qrcodes/mateusz_pawlik.png" alt="Mateusz Pawlik"
-                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="160"
-                                        height="160">
+                                        class="w-full h-full object-cover" loading="lazy" decoding="async" width="128"
+                                        height="128">
                                 </div>
                             </div>
-                            <div class="mt-auto">
+                            <div class="mt-auto relative z-10">
                                 <h3
                                     class="font-bold text-sm mb-1 text-white group-hover:text-forge-accent transition-colors font-sans">
                                     Mateusz
@@ -881,7 +1100,7 @@
                                         <path
                                             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                     </svg>
-                                    Zobacz profil
+                                    Profil
                                 </span>
                             </div>
                         </div>
@@ -1223,6 +1442,19 @@
                 });
             });
             videos.forEach(video => videoObserver.observe(video));
+        });
+
+        // Spotlight Effect
+        document.addEventListener('mousemove', e => {
+            const cards = document.getElementsByClassName('spotlight-card');
+            for (const card of cards) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            }
         });
     </script>
 
