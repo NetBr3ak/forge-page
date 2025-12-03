@@ -65,8 +65,6 @@
 					source.src = source.dataset.src;
 					video.load();
 				}
-				// Ensure loop for modal videos
-				video.loop = true;
 				video.play().catch(e => console.debug('Auto-play prevented:', e));
 			}
 		},
@@ -193,9 +191,10 @@
 
 			this.preloadNext();
 			elements.heroVideo.addEventListener('ended', this.handleEnd.bind(this));
-			// Remove loop for all videos - let them play to end
-			elements.heroVideo.removeAttribute('loop');
-			this.startRotation();
+			this.scheduleRotation();
+
+			// Lazy load other videos
+			this.initLazyLoading();
 		},
 
 		initLazyLoading: function () {
@@ -232,9 +231,15 @@
 			}
 		},
 
-		startRotation: function () {
-			// Start playing the first video without loop
-			elements.heroVideo.play().catch(err => console.warn('Video play failed:', err));
+		scheduleRotation: function () {
+			const keys = Object.keys(CONFIG.video.files);
+			const currentKey = keys[state.currentVideoIndex];
+			const isAnalytics = CONFIG.video.files[currentKey] === CONFIG.video.files.analytics;
+
+			if (isAnalytics) return; // Wait for 'ended' event
+
+			if (state.rotationTimeout) clearTimeout(state.rotationTimeout);
+			state.rotationTimeout = setTimeout(() => this.rotate(), CONFIG.video.rotationInterval);
 		},
 
 		rotate: function () {
@@ -242,6 +247,7 @@
 			state.currentVideoIndex = (state.currentVideoIndex + 1) % keys.length;
 			const nextKey = keys[state.currentVideoIndex];
 			const nextSrc = getVideoPath(nextKey);
+			const isAnalytics = nextKey === 'analytics';
 
 			elements.heroVideo.style.opacity = '0';
 
@@ -250,25 +256,34 @@
 				if (!source) return;
 
 				source.src = nextSrc;
-				// Ensure no loop for any video
-				elements.heroVideo.removeAttribute('loop');
+				elements.heroVideo.loop = !isAnalytics;
+				if (isAnalytics) {
+					elements.heroVideo.removeAttribute('loop');
+				} else {
+					elements.heroVideo.setAttribute('loop', '');
+				}
 
 				elements.heroVideo.load();
 				elements.heroVideo.play()
 					.then(() => {
 						elements.heroVideo.style.opacity = '0.5';
 						this.preloadNext();
+						this.scheduleRotation();
 					})
 					.catch(err => {
 						console.warn('Video rotation failed:', err);
 						elements.heroVideo.style.opacity = '0.5';
+						this.scheduleRotation(); // Try next rotation anyway
 					});
 			}, CONFIG.video.fadeDuration);
 		},
 
 		handleEnd: function () {
-			// When current video ends, rotate to next
-			this.rotate();
+			const keys = Object.keys(CONFIG.video.files);
+			const currentKey = keys[state.currentVideoIndex];
+			if (currentKey === 'analytics') {
+				setTimeout(() => this.rotate(), 100);
+			}
 		}
 	};
 
