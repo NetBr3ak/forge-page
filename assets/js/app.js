@@ -14,8 +14,6 @@
 				analytics: 'analytics.mp4',
 				errorHandler: 'error_handler.mp4'
 			},
-			// Add smooth opacity transition to heroVideo
-			elements.heroVideo.style.transition = 'opacity ' + CONFIG.video.fadeDuration + 'ms ease-in-out';
 			rotationInterval: 10000,
 			fadeDuration: 800
 		},
@@ -31,6 +29,7 @@
 		rotationTimeout: null,
 		preloadedVideos: new Set(),
 		isReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+		isFading: false,
 		lastFocusedElement: null
 	};
 
@@ -182,6 +181,13 @@
 		init: function () {
 			if (!elements.heroVideo) return;
 
+			// record the intended (visible) target opacity from CSS (fallback to 0.5)
+			try {
+				state.heroTargetOpacity = parseFloat(window.getComputedStyle(elements.heroVideo).opacity) || 0.5;
+			} catch (e) {
+				state.heroTargetOpacity = 0.5;
+			}
+
 			// Network-aware loading
 			if ('connection' in navigator) {
 				const conn = navigator.connection;
@@ -193,6 +199,9 @@
 
 			this.preloadNext();
 			elements.heroVideo.addEventListener('ended', this.handleEnd.bind(this));
+			// For non-looping videos (analytics) start fading shortly before end so the
+			// end of the clip feels like a graceful fade-out, then rotate to the next.
+			elements.heroVideo.addEventListener('timeupdate', this.handleTimeUpdate.bind(this), { passive: true });
 			this.scheduleRotation();
 
 			// Lazy load other videos
@@ -233,6 +242,60 @@
 			}
 		},
 
+		/**
+		 * Fade helper — changes opacity using CSS transition and resolves when done.
+		 */
+		fadeTo: function (targetOpacity, durationOverride) {
+			if (!elements.heroVideo) return Promise.resolve();
+
+			const duration = typeof durationOverride === 'number' ? durationOverride : CONFIG.video.fadeDuration;
+
+			return new Promise(resolve => {
+				const el = elements.heroVideo;
+				let finished = false;
+
+				function cleanup() {
+					el.removeEventListener('transitionend', onEnd);
+					clearTimeout(timeout);
+					finished = true;
+					resolve();
+				}
+
+				function onEnd(e) {
+					if (e && e.propertyName !== 'opacity') return;
+					cleanup();
+				}
+
+				// Ensure transition duration uses our configured time so JS wait matches CSS
+				el.style.transition = `opacity ${duration}ms ease-in-out`;
+				el.addEventListener('transitionend', onEnd);
+				el.style.opacity = String(targetOpacity);
+
+				// Fallback in case 'transitionend' doesn't fire
+				const timeout = setTimeout(() => {
+					if (!finished) cleanup();
+				}, duration + 80);
+			});
+		},
+
+		handleTimeUpdate: function () {
+			if (!elements.heroVideo || state.isReducedMotion || state.isFading) return;
+
+			const duration = elements.heroVideo.duration || 0;
+			const current = elements.heroVideo.currentTime || 0;
+			const remaining = duration - current;
+
+			// If we're within fadeDuration of the end and the currently playing clip is non-looping,
+			// trigger a rotation (which will include the fade-out/fade-in flow).
+			const keys = Object.keys(CONFIG.video.files);
+			const currentKey = keys[state.currentVideoIndex];
+			const isAnalytics = currentKey === 'analytics';
+
+			if (isAnalytics && duration > 0 && remaining <= (CONFIG.video.fadeDuration / 1000) + 0.05) {
+				this.rotate();
+			}
+		},
+
 		scheduleRotation: function () {
 			const keys = Object.keys(CONFIG.video.files);
 			const currentKey = keys[state.currentVideoIndex];
@@ -245,39 +308,53 @@
 		},
 
 		rotate: function () {
+			if (!elements.heroVideo || state.isFading) return;
+
 			const keys = Object.keys(CONFIG.video.files);
-			state.currentVideoIndex = (state.currentVideoIndex + 1) % keys.length;
-			const nextKey = keys[state.currentVideoIndex];
+			const nextIndex = (state.currentVideoIndex + 1) % keys.length;
+			const nextKey = keys[nextIndex];
 			const nextSrc = getVideoPath(nextKey);
 			const isAnalytics = nextKey === 'analytics';
 
-			elements.heroVideo.style.opacity = '0';
+			// Mark busy so additional rotate/ended/timeupdate events don't double-run
+			state.isFading = true;
 
-			setTimeout(() => {
-				const source = elements.heroVideo.querySelector('source');
-				if (!source) return;
+			const doSwap = async () => {
+				try {
+					if (!state.isReducedMotion) await this.fadeTo(0);
 
-				source.src = nextSrc;
-				elements.heroVideo.loop = !isAnalytics;
-				if (isAnalytics) {
-					elements.heroVideo.removeAttribute('loop');
-				} else {
-					elements.heroVideo.setAttribute('loop', '');
-				}
+					const source = elements.heroVideo.querySelector('source');
+					if (!source) return;
 
-				elements.heroVideo.load();
-				elements.heroVideo.play()
-					.then(() => {
-						elements.heroVideo.style.opacity = '0.5';
-						this.preloadNext();
-						this.scheduleRotation();
-					})
-					.catch(err => {
+					source.src = nextSrc;
+					if (isAnalytics) {
+						elements.heroVideo.removeAttribute('loop');
+					} else {
+						elements.heroVideo.setAttribute('loop', '');
+					}
+
+					elements.heroVideo.load();
+					try {
+						await elements.heroVideo.play();
+					} catch (err) {
 						console.warn('Video rotation failed:', err);
-						elements.heroVideo.style.opacity = '0.5';
-						this.scheduleRotation(); // Try next rotation anyway
-					});
-			}, CONFIG.video.fadeDuration);
+					}
+
+					// Keep the same target visible opacity used by the site styles
+					if (!state.isReducedMotion) await this.fadeTo(state.heroTargetOpacity || 0.5);
+					else elements.heroVideo.style.opacity = String(state.heroTargetOpacity || 0.5);
+
+					// update index now that swap succeeded
+					state.currentVideoIndex = nextIndex;
+					this.preloadNext();
+					this.scheduleRotation();
+				} finally {
+					state.isFading = false;
+				}
+			};
+
+			// Trigger the sequence slightly after scheduling to allow any pending events to settle
+			setTimeout(doSwap, 10);
 		},
 
 		handleEnd: function () {
