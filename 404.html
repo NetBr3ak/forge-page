@@ -22,6 +22,17 @@
 		rel="stylesheet">
 
 	<link rel="stylesheet" href="assets/css/styles.css">
+
+	<script>
+		// Redirect /en/ and /en to the main English page
+		(function() {
+			const path = window.location.pathname;
+			const basePath = '/forge-page/';
+			if (path === basePath + 'en' || path === basePath + 'en/') {
+				window.location.replace(basePath);
+			}
+		})();
+	</script>
 </head>
 
 <body
